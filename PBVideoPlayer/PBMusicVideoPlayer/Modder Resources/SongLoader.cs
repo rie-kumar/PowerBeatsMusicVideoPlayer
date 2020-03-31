@@ -10,7 +10,7 @@ namespace PBMusicVideoPlayer
     public class SongLoader : Singleton<SongLoader>
     {
         public string customSongsFullPath = string.Empty;
-        public Dictionary<string, string> CustomSongs;
+        public Dictionary<string, MappedCustomSong> CustomSongs = new Dictionary<string, MappedCustomSong>();
 
         private readonly string layoutsPath = "PowerBeatsVR_Data\\Layouts";
         private readonly string customSongsPath = "CustomSongs";
@@ -26,9 +26,11 @@ namespace PBMusicVideoPlayer
 
             foreach (var song in Directory.GetFiles(layoutsFullPath))
             {
-                CustomSongs.Add(Path.GetFileName(song), song);
-                Logger.Instance.Log($"Song: {Path.GetFileName(song)}, Path: {song}", Logger.LogSeverity.DEBUG);
-                Directory.CreateDirectory(Path.Combine(customSongsFullPath, song));
+                string songName = Path.GetFileNameWithoutExtension(song);
+                string songModPath = Path.Combine(customSongsFullPath, songName);
+                CustomSongs.Add(songName, new MappedCustomSong(songName, song, songModPath));
+                Directory.CreateDirectory(songModPath);
+                Logger.Instance.Log($"Song: {songName}, Path: {song}", Logger.LogSeverity.DEBUG);
             }
         }
     }

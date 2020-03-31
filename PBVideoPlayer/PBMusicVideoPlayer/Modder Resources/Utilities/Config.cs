@@ -15,7 +15,7 @@ namespace PBMusicVideoPlayer
         public delegate void OnFileChanged(object sender, FileSystemEventArgs e);
 
         private readonly string fileExtension = ".ini";
-        private readonly string PluginDataFolderName = "PluginData";
+        private readonly string ModDataFolderName = "ModsData";
 
         private Configuration config;
         private FileSystemWatcher watcher;
@@ -24,7 +24,7 @@ namespace PBMusicVideoPlayer
         public Config(string configName, bool pollChanges = false)
         {
             string gameFolderPath = Directory.GetCurrentDirectory();
-            string dataPath = Path.Combine(gameFolderPath, PluginDataFolderName);
+            string dataPath = Path.Combine(gameFolderPath, ModDataFolderName);
 
             Directory.CreateDirectory(dataPath);
 

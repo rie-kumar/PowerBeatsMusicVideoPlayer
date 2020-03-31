@@ -281,20 +281,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Modder Resources\MappedCustomSong.cs" />
+    <Compile Include="Modder Resources\SongLoader.cs" />
     <Compile Include="Modder Resources\HelperExtensions.cs" />
     <Compile Include="Modder Resources\Logger.cs" />
     <Compile Include="Modder Resources\Utilities\MenuUtil.cs" />
     <Compile Include="Modder Resources\Utilities\Config.cs" />
+    <Compile Include="Models\SongInfoData.cs" />
+    <Compile Include="Models\YTResult.cs" />
     <Compile Include="Settings\MVPSettings.cs" />
-    <Compile Include="Plugin.cs" />
+    <Compile Include="Loader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Modder Resources\Singelton.cs" />
     <Compile Include="Settings\VideoPlacementSetting.cs" />
     <Compile Include="Settings\VideoQualitySetting.cs" />
+    <Compile Include="Models\VideoData.cs" />
+    <Compile Include="VideoLoader.cs" />
     <Compile Include="VideoPlayerManager.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetDir)$(TargetFileName)" "E:\Games\Steam\steamapps\common\PowerBeatsVR\Plugins"</PostBuildEvent>
+    <PostBuildEvent>copy /Y "$(TargetDir)$(TargetFileName)" "E:\Games\Steam\steamapps\common\PowerBeatsVR\Mods"</PostBuildEvent>
   </PropertyGroup>
 </Project>
