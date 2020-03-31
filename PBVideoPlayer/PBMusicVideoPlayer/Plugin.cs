@@ -14,6 +14,7 @@ namespace PBMusicVideoPlayer
         {
             MenuUtil.Instance.OnLoad();
             VideoPlayerManager.Instance.OnLoad();
+            MVPSettings.Instance.OnLoad();
         }
     }
 }

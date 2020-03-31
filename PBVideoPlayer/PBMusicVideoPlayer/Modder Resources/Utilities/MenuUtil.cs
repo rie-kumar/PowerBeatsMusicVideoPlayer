@@ -352,6 +352,7 @@ namespace PBMusicVideoPlayer
                 MenuReady(menu);
             }
 
+            Logger.Instance.Log(menu.transform.position.ToString(), Logger.LogSeverity.DEBUG);
             StartCoroutine(FindManager());
         }
 
