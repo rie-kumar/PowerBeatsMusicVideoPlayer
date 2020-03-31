@@ -1,4 +1,5 @@
-﻿using powerbeatsvr;
+﻿using PBMusicVideoPlayer.Settings;
+using powerbeatsvr;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Video;
@@ -9,23 +10,6 @@ namespace PBMusicVideoPlayer
     {
         public VideoPlayer Player;
         private GameObject container;
-
-        private class VideoData
-        {
-            public int customSongIndex;
-            public string customSongPath;
-
-            public VideoData(int index, string path)
-            {
-                customSongIndex = index;
-                customSongPath = path;
-            }
-
-            public override string ToString()
-            {
-                return $"Index: {customSongIndex}\nPath: {customSongPath}"; 
-            }
-        }
 
         public void OnLoad()
         {
@@ -60,10 +44,11 @@ namespace PBMusicVideoPlayer
             Player.errorReceived += ErrorRecieved;
         }
 
-        public void UpdatePosition(Vector3 position)
+        public void SetPosition(VideoPlacement placement)
         {
+            var position = VideoPlacementSetting.Position(placement);
             container.transform.position = position;
-            Logger.Instance.Log(position.ToString(), Logger.LogSeverity.DEBUG);
+            Logger.Instance.Log($"Player moved to {position.ToString()}", Logger.LogSeverity.DEBUG);
         }
 
         private void ErrorRecieved(VideoPlayer source, string message)

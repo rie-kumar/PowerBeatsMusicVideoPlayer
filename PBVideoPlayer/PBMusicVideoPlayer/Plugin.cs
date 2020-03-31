@@ -1,4 +1,5 @@
-﻿using powerbeatsvr;
+﻿using PBMusicVideoPlayer.Settings;
+using powerbeatsvr;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace PBMusicVideoPlayer
     {
         public static void Init()
         {
+            SongLoader.Instance.OnLoad();
             MenuUtil.Instance.OnLoad();
             VideoPlayerManager.Instance.OnLoad();
             MVPSettings.Instance.OnLoad();

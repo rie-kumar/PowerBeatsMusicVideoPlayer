@@ -86,11 +86,11 @@ namespace PBMusicVideoPlayer
             config.Save();
         }
 
-        public string GetString(string sectionName, string name)
+        public string GetString(string sectionName, string name, string defaultValue)
         {
             var section = GetSection(sectionName);
             var setting = section.Settings[name];
-            string value = string.Empty;
+            string value = defaultValue;
 
             if(setting != null)
             {
