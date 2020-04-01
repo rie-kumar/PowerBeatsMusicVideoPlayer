@@ -287,7 +287,6 @@
     <Compile Include="Modder Resources\Logger.cs" />
     <Compile Include="Modder Resources\Utilities\MenuUtil.cs" />
     <Compile Include="Modder Resources\Utilities\Config.cs" />
-    <Compile Include="Models\SongInfoData.cs" />
     <Compile Include="Models\YTResult.cs" />
     <Compile Include="Settings\MVPSettings.cs" />
     <Compile Include="Loader.cs" />

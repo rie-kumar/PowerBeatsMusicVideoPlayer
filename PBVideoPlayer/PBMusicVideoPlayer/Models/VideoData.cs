@@ -22,7 +22,7 @@ namespace PBMusicVideoPlayer.Models
         public string VideoPath;
 
         [System.NonSerialized]
-        public SongInfoData Song;
+        public MappedCustomSong Song;
         [System.NonSerialized]
         public float DownloadProgress = 0f;
         [System.NonSerialized]
@@ -33,7 +33,7 @@ namespace PBMusicVideoPlayer.Models
             return String.Format("{0} by {1} [{2}] \n {3} \n {4} \n {5}", Title, Author, Duration, URL, Description, ThumbnailURL);
         }
 
-        public VideoData(YTResult ytResult, SongInfoData song)
+        public VideoData(YTResult ytResult, MappedCustomSong song)
         {
             Title = ytResult.Title;
             Author = ytResult.Author;
