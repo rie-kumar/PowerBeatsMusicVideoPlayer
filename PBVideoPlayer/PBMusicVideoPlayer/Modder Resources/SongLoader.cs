@@ -33,5 +33,16 @@ namespace PBMusicVideoPlayer
                 Logger.Instance.Log($"Song: {songName}, Path: {song}", Logger.LogSeverity.DEBUG);
             }
         }
+
+        public MappedCustomSong GetMappedSong(string songName)
+        {
+            if(string.IsNullOrEmpty(songName) || !CustomSongs.TryGetValue(songName, out MappedCustomSong customSong))
+            {
+                customSong = null;
+                Logger.Instance.Log($"Failed to get mapped song {songName}", Logger.LogSeverity.WARN);
+            }
+
+            return customSong;
+        }
     }
 }

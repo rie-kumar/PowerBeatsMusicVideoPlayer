@@ -36,6 +36,28 @@ namespace PBMusicVideoPlayer
             RetrieveVideoData();
         }
 
+        public bool TryGetVideo(MappedCustomSong song, out VideoData video)
+        {
+            if(song == null || !videos.TryGetValue(song, out video))
+            {
+                video = null;
+                Logger.Instance.Log($"Failed to get video for {song.SongName}", Logger.LogSeverity.WARN);
+            }
+
+            return video != null;
+        }
+
+        public bool TryGetVideo(string songName, out VideoData video)
+        {
+            if (string.IsNullOrEmpty(songName) || !videos.TryGetValue(SongLoader.Instance.GetMappedSong(songName), out video))
+            {
+                video = null;
+                Logger.Instance.Log($"Failed to get video for {songName}", Logger.LogSeverity.WARN);
+            }
+
+            return video != null;
+        }
+
         public void AddVideo(VideoData video)
         {
             videos.Add(video.Song, video);

@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,12 +20,14 @@ namespace PBMusicVideoPlayer
         public Menu menu;
         public FileListManager manager;
 
-        public event OnSceneLoaded EnvironmentSceneLoaded;
-        public event OnSceneLoaded FrameworkSceneLoaded;
-        public event OnSceneLoaded MenuSceneLoaded;
-        public event OnMenuReady MenuReady;
-        public event MenuSelectButton.OnClick OnStartGame;
+        public event OnSceneLoaded EnvironmentSceneLoadedEvent;
+        public event OnSceneLoaded FrameworkSceneLoadedEvent;
+        public event OnSceneLoaded MenuSceneLoadedEvent;
+        public event OnMenuReady MenuReadyEvent;
+        public event MenuSelectButton.OnClick StartGameEvent;
+        public event OnSongSelected SongSelectedEvent;
 
+        public delegate void OnSongSelected(int index, string songPath, string songName);
         public delegate void OnMenuReady(Menu menu);
         public delegate void OnSceneLoaded(Scene scene);
 
@@ -32,34 +35,34 @@ namespace PBMusicVideoPlayer
         {
             StartCoroutine(FindMenu());
 
-            SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+            SceneManager.sceneLoaded += SceneLoaded;
         }
 
-        private void SceneManager_sceneLoaded(Scene loaded, LoadSceneMode loadMode)
+        private void SceneLoaded(Scene loaded, LoadSceneMode loadMode)
         {
             Logger.Instance.Log($"Scene Loaded: {loaded.name}", Logger.LogSeverity.DEBUG);
 
             if (loaded.name == MenuSceneName)
             {
-                if(MenuSceneLoaded != null)
+                if(MenuSceneLoadedEvent != null)
                 {
-                    MenuSceneLoaded(loaded);
+                    MenuSceneLoadedEvent(loaded);
                 }
 
                 StartCoroutine(FindMenu());
             }
             else if (loaded.name == FrameworkSceneName)
             {
-                if (FrameworkSceneLoaded != null)
+                if (FrameworkSceneLoadedEvent != null)
                 {
-                    FrameworkSceneLoaded(loaded);
+                    FrameworkSceneLoadedEvent(loaded);
                 }
             }
             else
             {
-                if (EnvironmentSceneLoaded != null)
+                if (EnvironmentSceneLoadedEvent != null)
                 {
-                    EnvironmentSceneLoaded(loaded);
+                    EnvironmentSceneLoadedEvent(loaded);
                 }
             }
         }
@@ -73,9 +76,9 @@ namespace PBMusicVideoPlayer
             switch (action)
             {
                 case MenuSelectButton.Action.StartGame:
-                    if(OnStartGame != null)
+                    if(StartGameEvent != null)
                     {
-                        OnStartGame(button);
+                        StartGameEvent(button);
                     }
 
                     ExitMenu();
@@ -328,7 +331,7 @@ namespace PBMusicVideoPlayer
 
             if (manager != null)
             {
-                manager.SongClicked -= Manager_SongClicked;
+                manager.SongClicked -= SongSelectected;
             }
         }
 
@@ -347,9 +350,9 @@ namespace PBMusicVideoPlayer
                 button.onClick += SelectionButtonSelect;
             }
 
-            if(MenuReady != null)
+            if(MenuReadyEvent != null)
             {
-                MenuReady(menu);
+                MenuReadyEvent(menu);
             }
 
             Logger.Instance.Log(menu.transform.position.ToString(), Logger.LogSeverity.DEBUG);
@@ -364,12 +367,15 @@ namespace PBMusicVideoPlayer
                 yield return null;
             }
 
-            manager.SongClicked += Manager_SongClicked;
+            manager.SongClicked += SongSelectected;
         }
 
-        private void Manager_SongClicked(int arg1, string arg2)
+        private void SongSelectected(int songIndex, string songFullPath)
         {
-            Logger.Instance.Log(arg2, Logger.LogSeverity.DEBUG);
+            if(SongSelectedEvent != null)
+            {
+                SongSelectedEvent(songIndex, songFullPath, Path.GetFileNameWithoutExtension(songFullPath));
+            }
         }
     }
 }
