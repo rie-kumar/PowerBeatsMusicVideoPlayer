@@ -33,16 +33,27 @@ namespace PBMusicVideoPlayer.Settings
             }
         }
 
-        private Vector3 position;
-        public Vector3 Position 
+        private Vector3 customPosition;
+        public Vector3 CustomPosition 
         {
-            get => position;
+            get => customPosition;
             set
             {
-                position = value;
-                Config.SetFloat("Placement", "X", value.x);
-                Config.SetFloat("Placement", "Y", value.y);
-                Config.SetFloat("Placement", "Z", value.z);
+                customPosition = value;
+                Config.SetFloat("CustomPosX", "X", value.x);
+                Config.SetFloat("CustomPosY", "Y", value.y);
+                Config.SetFloat("CustomPosZ", "Z", value.z);
+            }
+        }
+
+        private float customScale;
+        public float CustomScale
+        {
+            get => customScale;
+            set
+            {
+                customScale = value;
+                Config.SetFloat("CustomScale", "Amount", value);
             }
         }
 
@@ -62,29 +73,37 @@ namespace PBMusicVideoPlayer.Settings
 
         private void UpdateSettings()
         {
-            if (Enum.TryParse(Config.GetString("Placement", "Position", "Bottom"), out VideoPlacement placementParsed))
-                placement = placementParsed;
-            else
-                placement = VideoPlacement.Bottom;
+            try
+            {
+                if (Enum.TryParse(Config.GetString("Placement", "Position", "Bottom"), out VideoPlacement placementParsed))
+                    placement = placementParsed;
+                else
+                    placement = VideoPlacement.Custom;
 
-            if (Enum.TryParse(Config.GetString("Format", "Quality", "Best"), out VideoQuality qualityParsed))
-                quality = qualityParsed;
-            else
-                quality = VideoQuality.Best;
+                if (Enum.TryParse(Config.GetString("Format", "Quality", "Best"), out VideoQuality qualityParsed))
+                    quality = qualityParsed;
+                else
+                    quality = VideoQuality.Best;
 
-            position = new Vector3(
-                    Config.GetFloat("Placement", "X"),
-                    Config.GetFloat("Placement", "Y"),
-                    Config.GetFloat("Placement", "Z"));
+                customPosition = new Vector3(
+                        Config.GetFloat("CustomPosX", "X"),
+                        Config.GetFloat("CustomPosY", "Y"),
+                        Config.GetFloat("CustomPosZ", "Z"));
+
+                customScale = Config.GetFloat("CustomScale", "Amount");
+            }
+            catch (Exception e)
+            {
+                Logger.Instance.Log("Crashed due to " + e, Logger.LogSeverity.ERROR);
+            }
         }
 
         private void ConfigUpdated(object sender, System.IO.FileSystemEventArgs e)
         {
-            Logger.Instance.Log("Config Updating", Logger.LogSeverity.DEBUG);
             UpdateSettings();
             Logger.Instance.Log("Config Updated", Logger.LogSeverity.DEBUG);
 
-            VideoPlayerManager.Instance.SetPosition(placement);
+            VideoPlayerManager.Instance.SetPlacement(placement);
         }
     }
 }

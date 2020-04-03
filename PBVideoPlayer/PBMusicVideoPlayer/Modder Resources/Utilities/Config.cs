@@ -72,30 +72,20 @@ namespace PBMusicVideoPlayer
         public void SetString(string sectionName, string name, string value)
         {
             var section = GetSection(sectionName);
-            var setting = section.Settings[name];
+            var setting = GetSetting(section, name, value);
 
-            if(setting == null)
-            {
-                section.Settings.Add(name, value);
-            }
-            else
-            {
-                setting.Value = value;
-            }
+            setting.Value = value;
 
             config.Save();
         }
 
         public string GetString(string sectionName, string name, string defaultValue)
         {
-            var section = GetSection(sectionName);
-            var setting = section.Settings[name];
             string value = defaultValue;
+            var section = GetSection(sectionName);
+            var setting = GetSetting(section, name, value);
 
-            if(setting != null)
-            {
-                value = setting.Value;
-            }
+            value = setting.Value;
 
             return value;
         }
@@ -103,30 +93,20 @@ namespace PBMusicVideoPlayer
         public void SetBool(string sectionName, string name, bool value)
         {
             var section = GetSection(sectionName);
-            var setting = section.Settings[name];
+            var setting = GetSetting(section, name, false.ToString());
 
-            if (setting == null)
-            {
-                section.Settings.Add(name, value.ToString());
-            }
-            else
-            {
-                setting.Value = value.ToString();
-            }
+            setting.Value = value.ToString();
 
             config.Save();
         }
 
         public bool GetBool(string sectionName, string name)
         {
-            var section = GetSection(sectionName);
-            var setting = section.Settings[name];
             bool value = false;
+            var section = GetSection(sectionName);
+            var setting = GetSetting(section, name, value.ToString());
 
-            if (setting != null)
-            {
-                bool.TryParse(setting.Value, out value);
-            }
+            bool.TryParse(setting.Value, out value);
 
             return value;
         }
@@ -134,34 +114,31 @@ namespace PBMusicVideoPlayer
         public void SetFloat(string sectionName, string name, float value)
         {
             var section = GetSection(sectionName);
-            var setting = section.Settings[name];
-
-            if (setting == null)
-            {
-                section.Settings.Add(name, value.ToString());
-            }
-            else
-            {
-                setting.Value = value.ToString();
-            }
-
+            var setting = GetSetting(section, name, "0");
+            setting.Value = value.ToString();
             config.Save();
         }
 
         public float GetFloat(string sectionName, string name)
         {
-            var section = GetSection(sectionName);
-            var setting = section.Settings[name];
             float value = 0.0f;
+            var section = GetSection(sectionName);
+            var setting = GetSetting(section, name, value.ToString());
 
-            if (setting != null)
-            {
-                float.TryParse(setting.Value, out value);
-            }
-
-            Logger.Instance.Log($"Is Null: {setting == null} - {value} of {name} else {setting.Value}", Logger.LogSeverity.DEBUG);
+            float.TryParse(setting.Value, out value);
 
             return value;
+        }
+
+        private KeyValueConfigurationElement GetSetting(AppSettingsSection section, string name, string defValue)
+        {
+            if(section.Settings[name] == null)
+            {
+                section.Settings.Add(name, defValue);
+                config.Save();
+            }
+
+            return section.Settings[name];
         }
 
         private AppSettingsSection GetSection(string sectionName)
@@ -172,6 +149,7 @@ namespace PBMusicVideoPlayer
             {
                 section = new AppSettingsSection();
                 config.Sections.Add(sectionName, section);
+                config.Save();
             }
             else
             {

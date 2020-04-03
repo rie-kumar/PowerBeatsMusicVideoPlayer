@@ -14,7 +14,7 @@ namespace PBMusicVideoPlayer
         public bool IsRetrieving = false;
         public event Action VideosLoadedEvent; 
 
-        private Dictionary<MappedCustomSong, VideoData> videos;
+        private Dictionary<MappedCustomSong, VideoData> videos = new Dictionary<MappedCustomSong, VideoData>();
 
         public static void SaveVideoToDisk(VideoData video)
         {
@@ -38,10 +38,9 @@ namespace PBMusicVideoPlayer
 
         public bool TryGetVideo(MappedCustomSong song, out VideoData video)
         {
-            if(song == null || !videos.TryGetValue(song, out video))
+            if (song == null || !videos.TryGetValue(song, out video))
             {
                 video = null;
-                Logger.Instance.Log($"Failed to get video for {song.SongName}", Logger.LogSeverity.WARN);
             }
 
             return video != null;
@@ -52,7 +51,6 @@ namespace PBMusicVideoPlayer
             if (string.IsNullOrEmpty(songName) || !videos.TryGetValue(SongLoader.Instance.GetMappedSong(songName), out video))
             {
                 video = null;
-                Logger.Instance.Log($"Failed to get video for {songName}", Logger.LogSeverity.WARN);
             }
 
             return video != null;
@@ -101,6 +99,11 @@ namespace PBMusicVideoPlayer
             });
         }
 
+        public string GetVideoPath(VideoData video)
+        {
+            return Path.Combine(video.Song.ModPath, video.VideoPath);
+        }
+
         private VideoData LoadVideo(string videoJsonPath, MappedCustomSong customSong)
         {
             var json = File.ReadAllText(videoJsonPath);
@@ -127,11 +130,6 @@ namespace PBMusicVideoPlayer
         private string GetJSONPath(string modPath)
         {
             return Path.Combine(modPath, "video.json");
-        }
-
-        private string GetVideoPath(VideoData video)
-        {
-            return Path.Combine(video.Song.ModPath, video.VideoPath);
         }
     }
 }

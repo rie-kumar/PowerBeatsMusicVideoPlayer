@@ -17,8 +17,10 @@ namespace PBMusicVideoPlayer
             {
                 SongLoader.Instance.OnLoad();
                 MenuUtil.Instance.OnLoad();
-                VideoPlayerManager.Instance.OnLoad();
                 MVPSettings.Instance.OnLoad();
+                VideoLoader.Instance.OnLoad();
+                VideoPlayerManager.Instance.OnLoad();
+                VideoPlayerController.Instance.OnLoad();
             }
             catch (Exception e)
             {

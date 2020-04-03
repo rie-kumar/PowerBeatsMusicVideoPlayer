@@ -16,11 +16,11 @@ namespace PBMusicVideoPlayer.Settings
             switch (placement)
             {
                 case VideoPlacement.Background:
-                    return new Vector3(0, 20, 50);
+                    return new Vector3(0, 10, 20);
                 case VideoPlacement.BackgroundLow:
-                    return new Vector3(0, 4.5f, 50);
+                    return new Vector3(0, 6f, 20);
                 case VideoPlacement.Center:
-                    return new Vector3(0, 4.5f, 35);
+                    return new Vector3(0, 2f, 15);
                 case VideoPlacement.Left:
                     return new Vector3(-8, 2, 11);
                 case VideoPlacement.Right:
@@ -28,7 +28,7 @@ namespace PBMusicVideoPlayer.Settings
                 case VideoPlacement.Top:
                     return new Vector3(0, 5, 10);
                 case VideoPlacement.Custom:
-                    return MVPSettings.Instance.Position;
+                    return MVPSettings.Instance.CustomPosition;
                 default:
                     return new Vector3(0, -1.5f, 7.35f);
             }
@@ -41,17 +41,17 @@ namespace PBMusicVideoPlayer.Settings
 
                 case VideoPlacement.BackgroundLow:
                 case VideoPlacement.Background:
-                    return new Vector3(0, 0, 0);
+                    return new Vector3(0, 0, 180);
                 case VideoPlacement.Center:
-                    return new Vector3(0, 0, 0);
+                    return new Vector3(0, 0, 180);
                 case VideoPlacement.Left:
-                    return new Vector3(0, -30, 0);
+                    return new Vector3(0, -30, 180);
                 case VideoPlacement.Right:
-                    return new Vector3(0, 30, 0);
+                    return new Vector3(0, 30, 180);
                 case VideoPlacement.Top:
-                    return new Vector3(-15, 0, 0);
+                    return new Vector3(-15, 0, 180);
                 default:
-                    return new Vector3(15, 0, 0);
+                    return new Vector3(0, 0, 180);
             }
         }
 
@@ -70,6 +70,8 @@ namespace PBMusicVideoPlayer.Settings
                     return 4;
                 case VideoPlacement.Top:
                     return 3;
+                case VideoPlacement.Custom:
+                    return MVPSettings.Instance.CustomScale;
                 default:
                     return 2;
             }
