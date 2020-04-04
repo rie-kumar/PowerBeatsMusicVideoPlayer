@@ -14,24 +14,37 @@ namespace PBMusicVideoPlayer
 
         public void OnLoad()
         {
-            MenuUtil.Instance.SongSelectedEvent += SongSelected;
-            MenuUtil.Instance.EnvironmentSceneLoadedEvent += EnvironmentSceneLoaded;
-            MenuUtil.Instance.MenuSceneLoadedEvent += MenuSceneLoadedEvent;
+            MenuUtil.Instance.SongSelectedEvent += OnSongSelected;
+            MenuUtil.Instance.EnvironmentSceneLoadedEvent += OnEnvironmentSceneLoaded;
+            MenuUtil.Instance.MenuSceneLoadedEvent += OnMenuSceneLoaded;
+            MenuUtil.Instance.GamePausedEvent += OnGamePaused;
         }
 
-        private void MenuSceneLoadedEvent(UnityEngine.SceneManagement.Scene scene)
+        private void OnGamePaused(bool isPaused)
+        {
+            if(isPaused)
+            {
+                VideoPlayerManager.Instance.Player.Pause();
+            }
+            else
+            {
+                VideoPlayerManager.Instance.Player.Play();
+            }
+        }
+
+        private void OnMenuSceneLoaded(UnityEngine.SceneManagement.Scene scene)
         {
             VideoPlayerManager.Instance.StopVideo();
             VideoPlayerManager.Instance.SetPlayerActive(false);
         }
 
-        private void EnvironmentSceneLoaded(UnityEngine.SceneManagement.Scene scene)
+        private void OnEnvironmentSceneLoaded(UnityEngine.SceneManagement.Scene scene)
         {
             VideoPlayerManager.Instance.SetPlayerActive(true);
             VideoPlayerManager.Instance.PlayVideo();
         }
 
-        private void SongSelected(int index, string songPath, string songName)
+        private void OnSongSelected(int index, string songPath, string songName)
         {
             try
             {

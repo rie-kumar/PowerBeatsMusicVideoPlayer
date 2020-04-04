@@ -17,19 +17,31 @@ namespace PBMusicVideoPlayer
         public readonly string FrameworkSceneName = "Framework";
         public readonly string MedievelEnvironmentSceneName = "Medieval Environment";
 
-        public Menu menu;
-        public FileListManager manager;
+        public Controller LeftController;
+        public Controller RightController;
 
         public event OnSceneLoaded EnvironmentSceneLoadedEvent;
         public event OnSceneLoaded FrameworkSceneLoadedEvent;
         public event OnSceneLoaded MenuSceneLoadedEvent;
         public event OnMenuReady MenuReadyEvent;
-        public event MenuSelectButton.OnClick StartGameEvent;
+        public event OnPauseMenuReady PauseMenuReadyEvent;
         public event OnSongSelected SongSelectedEvent;
+        public event OnGamePaused GamePausedEvent;
+        public event MenuSelectButton.OnClick StartGameEvent;
+        public event MenuSelectButton.OnClick GContinueEvent;
+        public event MenuSelectButton.OnClick GToMainMenu;
 
         public delegate void OnSongSelected(int index, string songPath, string songName);
         public delegate void OnMenuReady(Menu menu);
+        public delegate void OnPauseMenuReady(PauseMenu menu);
         public delegate void OnSceneLoaded(Scene scene);
+        public delegate void OnGamePaused(bool isPaused);
+
+        private Menu menu;
+        private PauseMenu pauseMenu;
+        private FileListManager manager;
+        private bool inGame = false;
+        private bool isPaused = false;
 
         public void OnLoad()
         {
@@ -38,32 +50,66 @@ namespace PBMusicVideoPlayer
             SceneManager.sceneLoaded += SceneLoaded;
         }
 
+        private void Start()
+        {
+            foreach (Controller controller in UnityEngine.Object.FindObjectsOfType<Controller>())
+            {
+                if (controller.handSide.Equals(LLManager.HandSide.LEFT))
+                {
+                    LeftController = controller;
+                }
+                if (controller.handSide.Equals(LLManager.HandSide.RIGHT))
+                {
+                    RightController = controller;
+                }
+            }
+
+            LeftController.systemButtonPressed += SystemButtonPressed;
+            LeftController.appButtonChanged += AppMenuButtonChanged;
+        }
+
+        private void AppMenuButtonChanged(bool isPressed)
+        {
+            if(inGame && isPressed)
+            {
+                if (!isPaused)
+                {
+                    FindPauseMenu();
+                }
+                else
+                {
+                    ExitPauseMenu();
+                }
+            }
+        }
+
+        private void SystemButtonPressed(bool pausePressed)
+        {
+            if(inGame && pausePressed)
+            {
+                FindPauseMenu();
+            }
+        }
+
         private void SceneLoaded(Scene loaded, LoadSceneMode loadMode)
         {
             Logger.Instance.Log($"Scene Loaded: {loaded.name}", Logger.LogSeverity.DEBUG);
 
             if (loaded.name == MenuSceneName)
             {
-                if(MenuSceneLoadedEvent != null)
-                {
-                    MenuSceneLoadedEvent(loaded);
-                }
+                inGame = false;
+                MenuSceneLoadedEvent?.Invoke(loaded);
 
                 StartCoroutine(FindMenu());
             }
             else if (loaded.name == FrameworkSceneName)
             {
-                if (FrameworkSceneLoadedEvent != null)
-                {
-                    FrameworkSceneLoadedEvent(loaded);
-                }
+                FrameworkSceneLoadedEvent?.Invoke(loaded);
             }
             else
             {
-                if (EnvironmentSceneLoadedEvent != null)
-                {
-                    EnvironmentSceneLoadedEvent(loaded);
-                }
+                inGame = true;
+                EnvironmentSceneLoadedEvent?.Invoke(loaded);
             }
         }
 
@@ -76,11 +122,7 @@ namespace PBMusicVideoPlayer
             switch (action)
             {
                 case MenuSelectButton.Action.StartGame:
-                    if(StartGameEvent != null)
-                    {
-                        StartGameEvent(button);
-                    }
-
+                    StartGameEvent?.Invoke(button);
                     ExitMenu();
                     break;
                 case MenuSelectButton.Action.Exit:
@@ -258,8 +300,12 @@ namespace PBMusicVideoPlayer
                 case MenuSelectButton.Action.EConfirmGenerate:
                     break;
                 case MenuSelectButton.Action.GContinue:
+                    GContinueEvent?.Invoke(button);
+                    ExitPauseMenu();
                     break;
                 case MenuSelectButton.Action.GToMainMenu:
+                    GToMainMenu?.Invoke(button);
+                    ExitPauseMenu();
                     break;
                 case MenuSelectButton.Action.GBPMHalf:
                     break;
@@ -335,6 +381,21 @@ namespace PBMusicVideoPlayer
             }
         }
 
+        private void ExitPauseMenu()
+        {
+            isPaused = false;
+
+            foreach (var selectButton in pauseMenu.GetComponentsInChildren<MenuSelectButton>())
+            {
+                selectButton.onClick -= SelectionButtonSelect;
+            }
+
+            if(inGame)
+            {
+                GamePausedEvent?.Invoke(isPaused);
+            }
+        }
+
         private IEnumerator FindMenu()
         {
             Logger.Instance.Log("Finding Menu", Logger.LogSeverity.DEBUG);
@@ -350,13 +411,30 @@ namespace PBMusicVideoPlayer
                 button.onClick += SelectionButtonSelect;
             }
 
-            if(MenuReadyEvent != null)
-            {
-                MenuReadyEvent(menu);
-            }
+            MenuReadyEvent?.Invoke(menu);
 
             Logger.Instance.Log(menu.transform.position.ToString(), Logger.LogSeverity.DEBUG);
             StartCoroutine(FindManager());
+        }
+
+        private IEnumerator FindPauseMenu()
+        {
+            Logger.Instance.Log("Finding Pause Menu", Logger.LogSeverity.DEBUG);
+
+            while (pauseMenu == null)
+            {
+                pauseMenu = FindObjectOfType<PauseMenu>();
+                yield return null;
+            }
+
+            foreach (var button in menu.GetComponentsInChildren<MenuSelectButton>())
+            {
+                button.onClick += SelectionButtonSelect;
+            }
+
+            isPaused = true;
+            PauseMenuReadyEvent?.Invoke(pauseMenu);
+            GamePausedEvent?.Invoke(isPaused);
         }
 
         private IEnumerator FindManager()
@@ -372,10 +450,7 @@ namespace PBMusicVideoPlayer
 
         private void SongSelectected(int songIndex, string songFullPath)
         {
-            if(SongSelectedEvent != null)
-            {
-                SongSelectedEvent(songIndex, songFullPath, Path.GetFileNameWithoutExtension(songFullPath));
-            }
+            SongSelectedEvent?.Invoke(songIndex, songFullPath, Path.GetFileNameWithoutExtension(songFullPath));
         }
     }
 }
