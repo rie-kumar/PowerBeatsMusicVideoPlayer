@@ -361,8 +361,6 @@ namespace PBMusicVideoPlayer
                     break;
                 case MenuSelectButton.Action.GSettingsReset:
                     break;
-                case MenuSelectButton.Action.NONE:
-                    break;
                 default:
                     break;
             }
