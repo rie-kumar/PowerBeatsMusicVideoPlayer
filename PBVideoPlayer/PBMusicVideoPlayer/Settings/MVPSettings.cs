@@ -75,7 +75,7 @@ namespace PBMusicVideoPlayer.Settings
         {
             try
             {
-                if (Enum.TryParse(Config.GetString("Placement", "Position", "Bottom"), out VideoPlacement placementParsed))
+                if (Enum.TryParse(Config.GetString("Placement", "Position", "Background"), out VideoPlacement placementParsed))
                     placement = placementParsed;
                 else
                     placement = VideoPlacement.Custom;
