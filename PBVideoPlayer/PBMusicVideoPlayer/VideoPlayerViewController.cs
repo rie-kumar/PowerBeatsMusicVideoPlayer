@@ -19,6 +19,8 @@ namespace PBMusicVideoPlayer
             MenuUtil.Instance.MenuSceneLoadedEvent += OnMenuSceneLoaded;
             MenuUtil.Instance.GamePausedEvent += OnGamePaused;
 
+            VideoPlayerManager.Instance.SetPlayerActive(false);
+
             if(MenuUtil.Instance.TryGetSelectedSongNameCustom(out string songName))
             {
                 SetVideo(songName);
