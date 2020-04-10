@@ -288,7 +288,7 @@
     <Compile Include="Modder Resources\Utilities\MenuUtil.cs" />
     <Compile Include="Modder Resources\Utilities\Config.cs" />
     <Compile Include="Models\YTResult.cs" />
-    <Compile Include="VideoPlayerController.cs" />
+    <Compile Include="VideoPlayerViewController.cs" />
     <Compile Include="Settings\MVPSettings.cs" />
     <Compile Include="Loader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

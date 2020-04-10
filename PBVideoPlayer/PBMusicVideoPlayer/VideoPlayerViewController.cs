@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PBMusicVideoPlayer
 {
-    public class VideoPlayerController : Singleton<VideoPlayerController>
+    public class VideoPlayerViewController : Singleton<VideoPlayerViewController>
     {
         public VideoData CurrentVideo = null;
         public MappedCustomSong CurrentSong = null;
@@ -18,6 +18,11 @@ namespace PBMusicVideoPlayer
             MenuUtil.Instance.EnvironmentSceneLoadedEvent += OnEnvironmentSceneLoaded;
             MenuUtil.Instance.MenuSceneLoadedEvent += OnMenuSceneLoaded;
             MenuUtil.Instance.GamePausedEvent += OnGamePaused;
+
+            if(MenuUtil.Instance.TryGetSelectedSongNameCustom(out string songName))
+            {
+                SetVideo(songName);
+            }
         }
 
         private void OnGamePaused(bool isPaused)
@@ -46,6 +51,11 @@ namespace PBMusicVideoPlayer
 
         private void OnSongSelected(int index, string songPath, string songName)
         {
+            SetVideo(songName);
+        }
+
+        private void SetVideo(string songName)
+        {
             try
             {
                 CurrentSong = SongLoader.Instance.GetMappedSong(songName);
@@ -64,7 +74,6 @@ namespace PBMusicVideoPlayer
             {
                 Logger.Instance.Log($"Got {e} on {songName}", Logger.LogSeverity.DEBUG);
             }
-            
         }
     }
 }

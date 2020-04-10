@@ -16,6 +16,8 @@ namespace PBMusicVideoPlayer
         public readonly string MenuSceneName = "Menu";
         public readonly string FrameworkSceneName = "Framework";
         public readonly string MedievelEnvironmentSceneName = "Medieval Environment";
+        public readonly string SETTINGS_SONG_EXTERNAL_NAME = "song_external_name";
+        public readonly string SETTINGS_SONG_FILE_DIR = "song_file_dir";
 
         public Controller LeftController;
         public Controller RightController;
@@ -30,11 +32,13 @@ namespace PBMusicVideoPlayer
         public event MenuSelectButton.OnClick StartGameEvent;
         public event MenuSelectButton.OnClick GContinueEvent;
         public event MenuSelectButton.OnClick GToMainMenu;
+        public event OnNavigationHappened NavigationHappenedEvent;
 
         public delegate void OnSongSelected(int index, string songPath, string songName);
         public delegate void OnMenuReady(Menu menu);
         public delegate void OnPauseMenuReady(PauseMenu menu);
         public delegate void OnSceneLoaded(Scene scene);
+        public delegate void OnNavigationHappened(string dir);
         public delegate void OnGamePaused(bool isPaused);
 
         private Menu menu;
@@ -48,6 +52,42 @@ namespace PBMusicVideoPlayer
             StartCoroutine(FindMenu());
 
             SceneManager.sceneLoaded += SceneLoaded;
+        }
+
+        public bool TryGetSelectedSongIndexCustom(out int selectedSongIndexCustom)
+        {
+            selectedSongIndexCustom = -1;
+
+            if (manager != null && PlayerPrefs.HasKey(SETTINGS_SONG_EXTERNAL_NAME))
+            {
+                selectedSongIndexCustom = manager.GetIndexOfEntry(PlayerPrefs.GetString(SETTINGS_SONG_EXTERNAL_NAME));
+            }
+
+            return selectedSongIndexCustom != -1;
+        }
+
+        public bool TryGetSelectedSongNameCustom(out string selectedSongNameCustom)
+        {
+            selectedSongNameCustom = string.Empty;
+
+            if (manager != null && PlayerPrefs.HasKey(SETTINGS_SONG_EXTERNAL_NAME))
+            {
+                selectedSongNameCustom = PlayerPrefs.GetString(SETTINGS_SONG_EXTERNAL_NAME);
+            }
+
+            return string.IsNullOrEmpty(selectedSongNameCustom);
+        }
+
+        public string GetSongFileDir()
+        {
+            string songFileDir = string.Empty;
+
+            if (manager != null && PlayerPrefs.HasKey(SETTINGS_SONG_FILE_DIR))
+            {
+                songFileDir = PlayerPrefs.GetString(SETTINGS_SONG_FILE_DIR);
+            }
+
+            return songFileDir;
         }
 
         private void Start()
@@ -444,6 +484,12 @@ namespace PBMusicVideoPlayer
             }
 
             manager.SongClicked += SongSelectected;
+            manager.NavigationHappened += NavigationHappened;
+        }
+
+        private void NavigationHappened(string dir)
+        {
+            NavigationHappenedEvent?.Invoke(dir);
         }
 
         private void SongSelectected(int songIndex, string songFullPath)
