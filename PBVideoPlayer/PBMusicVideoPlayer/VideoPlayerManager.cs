@@ -43,6 +43,7 @@ namespace PBMusicVideoPlayer
             Player.audioOutputMode = VideoAudioOutputMode.None;
             Player.errorReceived += ErrorRecieved;
 
+            SetPlayerActive(false);
             //TestVideo();
         }
 
