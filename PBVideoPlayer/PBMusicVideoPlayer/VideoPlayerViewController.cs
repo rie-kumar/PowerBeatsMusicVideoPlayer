@@ -18,6 +18,7 @@ namespace PBMusicVideoPlayer
             MenuUtil.Instance.EnvironmentSceneLoadedEvent += OnEnvironmentSceneLoaded;
             MenuUtil.Instance.MenuSceneLoadedEvent += OnMenuSceneLoaded;
             MenuUtil.Instance.GamePausedEvent += OnGamePaused;
+            MenuUtil.Instance.MenuReadyEvent += OnMenuReady;
 
             if(MenuUtil.Instance.TryGetSelectedSongNameCustom(out string songName))
             {
@@ -25,28 +26,45 @@ namespace PBMusicVideoPlayer
             }
         }
 
+        private void OnMenuReady(powerbeatsvr.Menu menu)
+        {
+            //PBUtil.Instance.PrintButtons();
+            //PBUtil.Instance.PrintCameras();
+        }
+
         private void OnGamePaused(bool isPaused)
         {
-            if(isPaused)
+            if(CurrentVideo != null)
             {
-                VideoPlayerManager.Instance.Player.Pause();
-            }
-            else
-            {
-                VideoPlayerManager.Instance.Player.Play();
+                if (isPaused)
+                {
+                    VideoPlayerManager.Instance.Player.Pause();
+                }
+                else
+                {
+                    VideoPlayerManager.Instance.Player.Play();
+                }
             }
         }
 
         private void OnMenuSceneLoaded(UnityEngine.SceneManagement.Scene scene)
         {
-            VideoPlayerManager.Instance.StopVideo();
+            if(CurrentVideo != null)
+            {
+                VideoPlayerManager.Instance.StopVideo();
+            }
+
             VideoPlayerManager.Instance.SetPlayerActive(false);
         }
 
         private void OnEnvironmentSceneLoaded(UnityEngine.SceneManagement.Scene scene)
         {
             VideoPlayerManager.Instance.SetPlayerActive(true);
-            VideoPlayerManager.Instance.PlayVideo();
+
+            if(CurrentVideo != null)
+            {
+                VideoPlayerManager.Instance.PlayVideo();
+            }
         }
 
         private void OnSongSelected(int index, string songPath, string songName)

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace PBMusicVideoPlayer.Settings
 {
-    public enum VideoPlacement { Background, BackgroundLow, Center, Left, Right, Bottom, Top, Custom };
+    public enum VideoPlacement { Desert, Medieval, Space, Unknown };
 
     public class VideoPlacementSetting
     {
@@ -15,22 +15,12 @@ namespace PBMusicVideoPlayer.Settings
         {
             switch (placement)
             {
-                case VideoPlacement.Background:
-                    return new Vector3(0, 10, 20);
-                case VideoPlacement.BackgroundLow:
-                    return new Vector3(0, 6f, 20);
-                case VideoPlacement.Center:
-                    return new Vector3(0, 2f, 15);
-                case VideoPlacement.Left:
-                    return new Vector3(-8, 2, 11);
-                case VideoPlacement.Right:
-                    return new Vector3(8, 2, 11);
-                case VideoPlacement.Top:
-                    return new Vector3(0, 5, 10);
-                case VideoPlacement.Custom:
-                    return MVPSettings.Instance.CustomPosition;
+                case VideoPlacement.Desert:
+                case VideoPlacement.Medieval:
+                case VideoPlacement.Space:
+                    return new Vector3(0, 10f, 20f);
                 default:
-                    return new Vector3(0, -1.5f, 7.35f);
+                    return new Vector3(0, 10f, 20f);
             }
         }
 
@@ -39,19 +29,12 @@ namespace PBMusicVideoPlayer.Settings
             switch (placement)
             {
 
-                case VideoPlacement.BackgroundLow:
-                case VideoPlacement.Background:
-                    return new Vector3(0, 0, 180);
-                case VideoPlacement.Center:
-                    return new Vector3(0, 0, 180);
-                case VideoPlacement.Left:
-                    return new Vector3(0, -30, 180);
-                case VideoPlacement.Right:
-                    return new Vector3(0, 30, 180);
-                case VideoPlacement.Top:
-                    return new Vector3(-15, 0, 180);
+                case VideoPlacement.Medieval:
+                case VideoPlacement.Desert:
+                case VideoPlacement.Space:
+                    return new Vector3(0, 0, 180f);
                 default:
-                    return new Vector3(0, 0, 180);
+                    return new Vector3(0, 0, 180f);
             }
         }
 
@@ -59,21 +42,12 @@ namespace PBMusicVideoPlayer.Settings
         {
             switch (placement)
             {
-                case VideoPlacement.BackgroundLow:
-                case VideoPlacement.Background:
-                    return 30;
-                case VideoPlacement.Center:
-                    return 8;
-                case VideoPlacement.Left:
-                    return 4;
-                case VideoPlacement.Right:
-                    return 4;
-                case VideoPlacement.Top:
-                    return 3;
-                case VideoPlacement.Custom:
-                    return MVPSettings.Instance.CustomScale;
+                case VideoPlacement.Medieval:
+                case VideoPlacement.Desert:
+                case VideoPlacement.Space:
+                    return 10;
                 default:
-                    return 2;
+                    return 10;
             }
         }
 
@@ -81,40 +55,11 @@ namespace PBMusicVideoPlayer.Settings
         {
             return new float[]
             {
-                (float)VideoPlacement.Background,
-                (float)VideoPlacement.BackgroundLow,
-                (float)VideoPlacement.Center,
-                (float)VideoPlacement.Left,
-                (float)VideoPlacement.Right,
-                (float)VideoPlacement.Bottom,
-                (float)VideoPlacement.Top,
-                (float)VideoPlacement.Custom
+                (float)VideoPlacement.Desert,
+                (float)VideoPlacement.Medieval,
+                (float)VideoPlacement.Space,
+                (float)VideoPlacement.Unknown
             };
-        }
-
-        public static string Name(VideoPlacement mode)
-        {
-            switch (mode)
-            {
-                case VideoPlacement.Background:
-                    return "Background";
-                case VideoPlacement.BackgroundLow:
-                    return "Background Low";
-                case VideoPlacement.Center:
-                    return "Center";
-                case VideoPlacement.Left:
-                    return "Left";
-                case VideoPlacement.Right:
-                    return "Right";
-                case VideoPlacement.Bottom:
-                    return "Bottom";
-                case VideoPlacement.Top:
-                    return "Top";
-                case VideoPlacement.Custom:
-                    return "Custom";
-                default:
-                    return "?";
-            }
         }
     }
 }

@@ -22,17 +22,6 @@ namespace PBMusicVideoPlayer.Settings
             }
         }
 
-        private VideoPlacement placement;
-        public VideoPlacement Placement
-        {
-            get => placement;
-            set
-            {
-                placement = value;
-                Config.SetString("Placement", "Position", placement.ToString());
-            }
-        }
-
         private Vector3 customPosition;
         public Vector3 CustomPosition 
         {
@@ -65,8 +54,7 @@ namespace PBMusicVideoPlayer.Settings
         void Awake()
         {
             Logger.Instance.Log("Creating Config!", Logger.LogSeverity.DEBUG);
-            Config = new Config("MVP", true);
-            Config.OnFileChangedEvent += ConfigUpdated;
+            Config = new Config("MVP");
 
             UpdateSettings();
         }
@@ -75,35 +63,15 @@ namespace PBMusicVideoPlayer.Settings
         {
             try
             {
-                if (Enum.TryParse(Config.GetString("Placement", "Position", "Background"), out VideoPlacement placementParsed))
-                    placement = placementParsed;
-                else
-                    placement = VideoPlacement.Custom;
-
                 if (Enum.TryParse(Config.GetString("Format", "Quality", "Best"), out VideoQuality qualityParsed))
                     quality = qualityParsed;
                 else
                     quality = VideoQuality.Best;
-
-                customPosition = new Vector3(
-                        Config.GetFloat("CustomPosX", "X"),
-                        Config.GetFloat("CustomPosY", "Y"),
-                        Config.GetFloat("CustomPosZ", "Z"));
-
-                customScale = Config.GetFloat("CustomScale", "Amount");
             }
             catch (Exception e)
             {
                 Logger.Instance.Log("Crashed due to " + e, Logger.LogSeverity.ERROR);
             }
-        }
-
-        private void ConfigUpdated(object sender, System.IO.FileSystemEventArgs e)
-        {
-            UpdateSettings();
-            Logger.Instance.Log("Config Updated", Logger.LogSeverity.DEBUG);
-
-            VideoPlayerManager.Instance.SetPlacement(placement);
         }
     }
 }

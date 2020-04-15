@@ -282,6 +282,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Modder Resources\MappedCustomSong.cs" />
+    <Compile Include="Modder Resources\Utilities\PBUtil.cs" />
     <Compile Include="Modder Resources\SongLoader.cs" />
     <Compile Include="Modder Resources\HelperExtensions.cs" />
     <Compile Include="Modder Resources\Logger.cs" />

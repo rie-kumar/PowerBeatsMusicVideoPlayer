@@ -30,7 +30,7 @@ namespace PBMusicVideoPlayer
                 string songModPath = Path.Combine(CustomSongsFullPath, songName);
                 CustomSongs.Add(songName, new MappedCustomSong(songName, song, songModPath));
                 Directory.CreateDirectory(songModPath);
-                Logger.Instance.Log($"Song: {songName}, Path: {song}", Logger.LogSeverity.DEBUG);
+                //Logger.Instance.Log($"Song: {songName}, Path: {song}", Logger.LogSeverity.DEBUG);
             }
         }
 

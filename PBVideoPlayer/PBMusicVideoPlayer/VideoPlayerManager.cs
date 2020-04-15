@@ -30,9 +30,7 @@ namespace PBMusicVideoPlayer
             //Creates the container for the video player.
             container = GameObject.CreatePrimitive(PrimitiveType.Cube);
             container.transform.parent = gameObject.transform;
-            SetPosition(MVPSettings.Instance.Placement);
-            SetRotation(MVPSettings.Instance.Placement);
-            SetScale(MVPSettings.Instance.Placement);
+            SetPlacement(VideoPlacement.Unknown);
             videoRenderer = container.GetComponent<Renderer>();
             videoRenderer.material = new Material(Shader.Find("Unlit/Texture"));
             //videoRenderer.material.color = Color.clear;
@@ -141,6 +139,7 @@ namespace PBMusicVideoPlayer
 
         public void SetPlayerActive(bool isShowing)
         {
+            Logger.Instance.Log($"Active: {isShowing}", Logger.LogSeverity.DEBUG);
             container.SetActive(isShowing);
         }
 

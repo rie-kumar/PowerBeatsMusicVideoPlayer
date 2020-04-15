@@ -20,6 +20,7 @@ namespace PBMusicVideoPlayer
                 MVPSettings.Instance.OnLoad();
                 VideoLoader.Instance.OnLoad();
                 VideoPlayerManager.Instance.OnLoad();
+                PBUtil.Instance.OnLoad();
                 VideoPlayerViewController.Instance.OnLoad();
             }
             catch (Exception e)
