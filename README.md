@@ -13,14 +13,14 @@ json file "video.json" is placed in the song directory and used to indicate the 
 **Sample video.json**
 ```json
 {
-	"title":"$100 Bills BEAT SABER Playthrough!",
-	"author":"Ruirize",
-	"description":"Come join me on https://twitch.tv/ruirize ! Mixed Reality filmed using LIV: https://liv.tv Played on the HTC Vive in Beat Saber. Twitch: ...",
-	"duration":"2:36",
+	"Title":"$100 Bills BEAT SABER Playthrough!",
+	"Author":"Ruirize",
+	"Description":"Come join me on https://twitch.tv/ruirize ! Mixed Reality filmed using LIV: https://liv.tv Played on the HTC Vive in Beat Saber. Twitch: ...",
+	"Duration":"2:36",
 	"URL":"/watch?v=NHD1utOvak8",
-	"thumbnailURL":"https://i.ytimg.com/vi/NHD1utOvak8/hqdefault.jpg?sqp=-oaymwEjCPYBEIoBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&amp;rs=AOn4CLD48jnea5icsiDQiE0QL4tF8j2t7w",
-	"loop":false,
-	"offset":0,
-	"videoPath":"$100 Bills BEAT SABER Playthrough!.mp4"
+	"ThumbnailURL":"https://i.ytimg.com/vi/NHD1utOvak8/hqdefault.jpg?sqp=-oaymwEjCPYBEIoBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&amp;rs=AOn4CLD48jnea5icsiDQiE0QL4tF8j2t7w",
+	"Loop":false,
+	"Offset":0,
+	"VideoPath":"$100 Bills BEAT SABER Playthrough!.mp4"
 }
 ```
